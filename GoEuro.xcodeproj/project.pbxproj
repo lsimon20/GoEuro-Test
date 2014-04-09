@@ -23,7 +23,6 @@
 		565F60F618F547B90041799F /* GoEuroTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 565F60F518F547B90041799F /* GoEuroTests.m */; };
 		565F610018F549A90041799F /* Logo_Goeuro-1024x196.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 565F60FF18F549A90041799F /* Logo_Goeuro-1024x196.jpg */; };
 		565F610218F549B10041799F /* goeuro.png in Resources */ = {isa = PBXBuildFile; fileRef = 565F610118F549B10041799F /* goeuro.png */; };
-		56FDB23C18F56F62002FB7BB /* GEDateField.m in Sources */ = {isa = PBXBuildFile; fileRef = 56FDB23B18F56F62002FB7BB /* GEDateField.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,8 +57,6 @@
 		565F60F518F547B90041799F /* GoEuroTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GoEuroTests.m; sourceTree = "<group>"; };
 		565F60FF18F549A90041799F /* Logo_Goeuro-1024x196.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Logo_Goeuro-1024x196.jpg"; sourceTree = "<group>"; };
 		565F610118F549B10041799F /* goeuro.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = goeuro.png; sourceTree = "<group>"; };
-		56FDB23A18F56F62002FB7BB /* GEDateField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GEDateField.h; sourceTree = "<group>"; };
-		56FDB23B18F56F62002FB7BB /* GEDateField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GEDateField.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,8 +121,6 @@
 				565F60DC18F547B90041799F /* Main.storyboard */,
 				565F60DF18F547B90041799F /* GEViewController.h */,
 				565F60E018F547B90041799F /* GEViewController.m */,
-				56FDB23A18F56F62002FB7BB /* GEDateField.h */,
-				56FDB23B18F56F62002FB7BB /* GEDateField.m */,
 				565F60E218F547B90041799F /* Images.xcassets */,
 				565F60D118F547B80041799F /* Supporting Files */,
 			);
@@ -265,7 +260,6 @@
 			files = (
 				565F60DB18F547B80041799F /* GEAppDelegate.m in Sources */,
 				565F60E118F547B90041799F /* GEViewController.m in Sources */,
-				56FDB23C18F56F62002FB7BB /* GEDateField.m in Sources */,
 				565F60D718F547B80041799F /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
