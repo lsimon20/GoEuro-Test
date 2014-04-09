@@ -8,9 +8,20 @@
 
 #import <UIKit/UIKit.h>
 
-@interface GEViewController : UIViewController
-@property (weak, nonatomic) IBOutlet UITextField *startTextField;
-@property (weak, nonatomic) IBOutlet UITextField *endTextField;
-@property (weak, nonatomic) IBOutlet UIDatePicker *datePicker;
+@interface GEViewController : UIViewController <UITextFieldDelegate,UIGestureRecognizerDelegate>
+@property (strong, nonatomic) UITextField *startTextField;
+@property (strong, nonatomic) UITextField *endTextField;
+@property (strong, nonatomic) UIImageView *imageView;
+@property (strong,nonatomic) UIScrollView *scrollView;
+@property (strong,nonatomic) UILabel *logoBackground;
+@property (strong,nonatomic) UILabel *searchBackground;
+@property (strong,nonatomic) UIButton *currentLocation1;
+@property (strong,nonatomic) UIButton *currentLocation2;
+@property (strong,nonatomic) UISegmentedControl *segmentedControl;
+@property (strong,nonatomic) UILabel *dateLabel;
+@property (strong,nonatomic) UIButton *Search;
 
+
+
+- (IBAction)Search:(id)sender;
 @end
