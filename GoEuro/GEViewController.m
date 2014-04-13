@@ -113,11 +113,14 @@
     
     
     //Suggestions TableView
-    self.suggestions = [[UITableView alloc]init];
-    self.suggestions.userInteractionEnabled = YES;
-    self.suggestions.dataSource = self;
-    self.suggestions.delegate = self;
-    [self.scrollView addSubview:self.suggestions];
+    self.suggestionsTable = [[UITableView alloc]init];
+    self.suggestionsTable.userInteractionEnabled = YES;
+    self.suggestionsTable.dataSource = self;
+    self.suggestionsTable.delegate = self;
+    [self.scrollView addSubview:self.suggestionsTable];
+    
+    //Sugestions DataArray
+    self.suggestionsData = [[NSMutableArray alloc]init];
     
     //Date Picker
     self.datePicker = [[UIDatePicker alloc]init];
@@ -137,7 +140,16 @@
     self.startTextField.delegate = self;
     self.endTextField.delegate = self;
 
-	// Do any additional setup after loading the view, typically from a nib.
+    //NSUrlSession
+    NSURLSessionConfiguration *sessionConfig =[NSURLSessionConfiguration defaultSessionConfiguration];
+    self.session =[NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:nil];
+    
+    //CoreLocation
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
+    self.locationManager.pausesLocationUpdatesAutomatically = NO;
+    [self.locationManager startUpdatingLocation];
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
@@ -157,7 +169,7 @@
         self.startOrFinish=false;
         return NO;
     }
-    else if ([touch.view isDescendantOfView:self.suggestions]) {
+    else if ([touch.view isDescendantOfView:self.suggestionsTable]) {
         
 
         return NO;
@@ -191,7 +203,7 @@
     } completion:^(BOOL finished) {
     //completed
 }];
-    self.suggestions.frame = CGRectMake(0, 0, 0, 0);
+    self.suggestionsTable.frame = CGRectMake(0, 0, 0, 0);
 }
 -(void)setMovedFramesForStart{
     [UIView animateWithDuration:.5 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
@@ -246,7 +258,6 @@
     
 }
 -(void)handleSingleTap{
-    NSLog(@"single tap");
     [self setInitialFrames];
     [self.startTextField resignFirstResponder];
     [self.endTextField resignFirstResponder];
@@ -269,34 +280,73 @@
 }
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    self.suggestions.frame = CGRectMake(32, textField.frame.origin.y+textField.frame.size.height, self.view.bounds.size.width-64, 50);
-
-    if ((textField.frame.origin.y+textField.frame.size.height<self.endTextField.frame.origin.y)) {
-        [self setMovedFramesForStart];
-    }
-    else{
-        [self setMovedFramesForEnd];
-    }
-    
+    [self.suggestionsData removeAllObjects];
+    [self.suggestionsTable reloadData];
+    [self.locationManager startUpdatingLocation];
     NSString *substring = [NSString stringWithString:textField.text];
     substring = [substring stringByReplacingCharactersInRange:range withString:string];
-    [self searchAutocompleteEntriesWithSubstring:substring];
+    [self.session resetWithCompletionHandler:^{
+        [[self.session dataTaskWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"https://api.goeuro.com/api/v2/position/suggest/de/%@",substring ]]
+                completionHandler:^(NSData *data,
+                                    NSURLResponse *response,
+                                    NSError *error) {
+                    NSArray *jsonArray = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+                    [self.suggestionsData removeAllObjects];
+                    if (error != nil) {
+                    }
+                    else {
+                        //we proceed to sort the array: but first we need to calculate the distance to us.
+                        //we will add the distance to us in a mutable copy of the json and add it to a new array that will be our DataSource
+                        [jsonArray enumerateObjectsUsingBlock:^(NSDictionary *dictionary, NSUInteger idx, BOOL *stop) {
+                            NSMutableDictionary *dictionaryWithDifference = [dictionary mutableCopy];
+                            
+                            
+                            
+                            CLLocation *cityLocation = [[CLLocation alloc]initWithLatitude:[[((NSDictionary *)[dictionary objectForKey:@"geo_position"]) objectForKey:@"latitude"] doubleValue] longitude:[[((NSDictionary *)[dictionary objectForKey:@"geo_position"]) objectForKey:@"longitude"] doubleValue]];
+                            
+                            [dictionaryWithDifference setObject:[NSString stringWithFormat:@"%lf",[self.location distanceFromLocation: cityLocation]/1000] forKey:@"NewDistance"];
+                            [self.suggestionsData addObject:dictionaryWithDifference];
+                        }];
+                        
+                        NSSortDescriptor *descriptor = [[NSSortDescriptor alloc] initWithKey:@"NewDistance"  ascending:YES];
+                        
+                        self.suggestionsData=[[self.suggestionsData sortedArrayUsingDescriptors:[NSArray arrayWithObjects:descriptor,nil]] mutableCopy];
+                        [self.suggestionsTable reloadData];
+
+                        if(self.suggestionsData.count >0){
+                            NSLog(@"I should be moving now");
+                            self.suggestionsTable.frame = CGRectMake(32, textField.frame.origin.y+textField.frame.size.height, self.view.bounds.size.width-64, 50);
+
+                            if ((textField.frame.origin.y+textField.frame.size.height<self.endTextField.frame.origin.y)) {
+                                [self setMovedFramesForStart];
+                            }
+                            else{
+                                [self setMovedFramesForEnd];
+                            }
+
+                        }
+                        
+
+                    }                }] resume];
+    }];
+
+    
+    
+   
     return YES;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 5;
+    return [self.suggestionsData count];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[NSString stringWithFormat:@"Suggestion %i",indexPath.row ]];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[NSString stringWithFormat:@"Suggestion %li",(long)indexPath.row ]];
     if (cell == nil)
     {
         cell = [[UITableViewCell alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 20) ];
-        [NSString stringWithFormat:@"Suggestion %i",indexPath.row];
     }
-    
-    cell.textLabel.text = [NSString stringWithFormat:@"Suggestion %i",indexPath.row];
+    cell.textLabel.text = [((NSDictionary *)[self.suggestionsData objectAtIndex:indexPath.row]) objectForKey:@"name"];
     return cell;
 }
 
@@ -304,6 +354,7 @@
 {
     return 20;
 }
+
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if(tableView.frame.origin.y<self.endTextField.frame.origin.y){
@@ -323,9 +374,10 @@
 
 - (void)searchAutocompleteEntriesWithSubstring:(NSString *)substring
 {
-
+    
 }
 - (IBAction)Search:(id)sender {
+    
 }
 
 -(void)dateChanged{
@@ -364,5 +416,19 @@
             
         }];
     }
+}
+
+-(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
+    self.location = locations.lastObject;
+    [manager stopUpdatingLocation];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    NSLog(@"Error while getting core location : %@",error);
+    if ([error code] == kCLErrorDenied) {
+        //you had denied
+    }
+//   [manager stopUpdatingLocation];
 }
 @end

@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreLocation/CoreLocation.h>
 
-@interface GEViewController : UIViewController <UITextFieldDelegate,UIGestureRecognizerDelegate,UITableViewDataSource,UITableViewDelegate>
+@interface GEViewController : UIViewController <UITextFieldDelegate,UIGestureRecognizerDelegate,UITableViewDataSource,UITableViewDelegate,NSURLSessionDelegate,CLLocationManagerDelegate>
 //UI Objects, in order of apearance.
 @property (strong,nonatomic) UIScrollView *scrollView;
 @property (strong,nonatomic) UILabel *logoBackground;
@@ -23,9 +24,13 @@
 @property (strong,nonatomic) UILabel *searchBackground;
 @property (strong,nonatomic) UIButton *Search;
 
-@property (strong,nonatomic) UITableView *suggestions;
+@property (strong,nonatomic) UITableView *suggestionsTable;
+@property (strong,nonatomic) NSMutableArray *suggestionsData;
 @property (strong,nonatomic) UIDatePicker *datePicker;
 
+@property (strong,nonatomic) NSURLSession *session;
+@property (strong, nonatomic) CLLocationManager *locationManager;
+@property (strong, nonatomic) CLLocation *location;
 
 - (IBAction)Search:(id)sender;
 @end

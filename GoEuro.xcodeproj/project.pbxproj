@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5630FB1418FB0C0800D9AB29 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5630FB1318FB0C0800D9AB29 /* CoreLocation.framework */; };
 		565F60CB18F547B80041799F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 565F60CA18F547B80041799F /* Foundation.framework */; };
 		565F60CD18F547B80041799F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 565F60CC18F547B80041799F /* CoreGraphics.framework */; };
 		565F60CF18F547B80041799F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 565F60CE18F547B80041799F /* UIKit.framework */; };
@@ -36,6 +37,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5630FB1318FB0C0800D9AB29 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		565F60C718F547B80041799F /* GoEuro.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GoEuro.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		565F60CA18F547B80041799F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		565F60CC18F547B80041799F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -64,6 +66,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5630FB1418FB0C0800D9AB29 /* CoreLocation.framework in Frameworks */,
 				565F60CD18F547B80041799F /* CoreGraphics.framework in Frameworks */,
 				565F60CF18F547B80041799F /* UIKit.framework in Frameworks */,
 				565F60CB18F547B80041799F /* Foundation.framework in Frameworks */,
@@ -105,6 +108,7 @@
 		565F60C918F547B80041799F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5630FB1318FB0C0800D9AB29 /* CoreLocation.framework */,
 				565F60CA18F547B80041799F /* Foundation.framework */,
 				565F60CC18F547B80041799F /* CoreGraphics.framework */,
 				565F60CE18F547B80041799F /* UIKit.framework */,
