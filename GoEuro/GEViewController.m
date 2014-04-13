@@ -43,13 +43,6 @@
     self.startTextField.placeholder = @"From: City, Town or Village";
     [self.scrollView addSubview:self.startTextField];
     
-    //Fast current location button
-    self.currentLocation1 = [[UIButton alloc]initWithFrame:CGRectMake(self.view.bounds.size.width-60, self.startTextField.frame.origin.y, 40, 40)];
-    self.currentLocation1.layer.cornerRadius = 14; // this value vary as per your desire
-    self.currentLocation1.clipsToBounds = YES;
-    self.currentLocation1.backgroundColor = [UIColor blueColor];
-    [self.scrollView addSubview:self.currentLocation1];
-
     //Destination
     self.endTextField = [[UITextField alloc]initWithFrame:CGRectMake(20, self.startTextField.frame.origin.y+self.startTextField.frame.size.height+20, self.view.bounds.size.width-40, 40)];
     self.endTextField.backgroundColor = [UIColor whiteColor];
@@ -58,12 +51,7 @@
     self.endTextField.placeholder = @"To: City, Town or Village";
     [self.scrollView addSubview:self.endTextField];
 
-    //fast current location button for destination
-    self.currentLocation2= [[UIButton alloc]initWithFrame:CGRectMake(self.view.bounds.size.width-60, self.endTextField.frame.origin.y, 40, 40)];
-    self.currentLocation2.layer.cornerRadius = 14; // this value vary as per your desire
-    self.currentLocation2.clipsToBounds = YES;
-    self.currentLocation2.backgroundColor = [UIColor blueColor];
-    [self.scrollView addSubview:self.currentLocation2];
+  
     
     //Round or single trip
     self.segmentedControl = [[UISegmentedControl alloc]initWithItems:@[@"Round-trip",@"One-way"]];
@@ -178,14 +166,12 @@
 }
 
 -(void)setInitialFrames{
-    [UIView animateWithDuration:.5 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+//    [UIView animateWithDuration:.5 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
         [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
         self.logoBackground.frame = CGRectMake(0, 0, self.view.bounds.size.width, (self.view.bounds.size.height/5) +15);
         self.imageView.frame =CGRectMake(20, 15, self.view.bounds.size.width-40, self.view.bounds.size.height/5);
         self.startTextField.frame = CGRectMake(20, self.imageView.frame.origin.y+self.imageView.frame.size.height+20, self.view.bounds.size.width-40, 40);
-        self.currentLocation1.frame =CGRectMake(self.view.bounds.size.width-60, self.startTextField.frame.origin.y, 40, 40);
-        self.endTextField.frame = CGRectMake(20, self.startTextField.frame.origin.y+self.startTextField.frame.size.height+20, self.view.bounds.size.width-40, 40);
-        self.currentLocation2.frame =CGRectMake(self.view.bounds.size.width-60, self.endTextField.frame.origin.y, 40, 40);
+               self.endTextField.frame = CGRectMake(20, self.startTextField.frame.origin.y+self.startTextField.frame.size.height+20, self.view.bounds.size.width-40, 40);
         self.segmentedControl.frame =CGRectMake(20, self.endTextField.frame.origin.y+self.endTextField.frame.size.height+20, self.view.frame.size.width-40, 40);
         self.dateLabel.frame =CGRectMake(20, self.segmentedControl.frame.origin.y+self.segmentedControl.frame.size.height+20, self.view.frame.size.width-40, 40);
         
@@ -200,15 +186,14 @@
         }
         
         self.datePicker.frame = CGRectMake(self.view.bounds.size.width, self.view.bounds.size.height, self.view.bounds.size.width, 160);
-    } completion:^(BOOL finished) {
-    //completed
-}];
+//    } completion:^(BOOL finished) {
+//    //completed
+//}];
     self.suggestionsTable.frame = CGRectMake(0, 0, 0, 0);
 }
 -(void)setMovedFramesForStart{
-    [UIView animateWithDuration:.5 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+//    [UIView animateWithDuration:.5 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
         self.endTextField.frame = CGRectMake(20, self.startTextField.frame.origin.y+self.startTextField.frame.size.height+20+50, self.view.bounds.size.width-40, 40);
-        self.currentLocation2.frame =CGRectMake(self.view.bounds.size.width-60, self.endTextField.frame.origin.y, 40, 40);
         self.segmentedControl.frame =CGRectMake(20, self.endTextField.frame.origin.y+self.endTextField.frame.size.height+20, self.view.frame.size.width-40, 40);
         self.dateLabel.frame =CGRectMake(20, self.segmentedControl.frame.origin.y+self.segmentedControl.frame.size.height+20, self.view.frame.size.width-40, 40);
         if(self.segmentedControl.selectedSegmentIndex==0){
@@ -220,13 +205,13 @@
             self.searchBackground.frame =CGRectMake((self.view.bounds.size.width/2)-41,self.dateLabel.frame.origin.y+self.dateLabel.frame.size.height+19,82,42);
             self.Search.frame = CGRectMake((self.view.bounds.size.width/2)-40,self.dateLabel.frame.origin.y+self.dateLabel.frame.size.height+20,80,40);
         }
-    } completion:^(BOOL finished) {
-        //completed
-    }];
+//    } completion:^(BOOL finished) {
+//        //completed
+//    }];
 }
 
 -(void)setMovedFramesForEnd{
-    [UIView animateWithDuration:.5 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+//    [UIView animateWithDuration:.5 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
         [self.scrollView setContentOffset:CGPointMake(self.scrollView.contentOffset.x, self.scrollView.contentOffset.x +50) animated:YES];
         self.segmentedControl.frame =CGRectMake(20, self.endTextField.frame.origin.y+self.endTextField.frame.size.height+20+50, self.view.frame.size.width-40, 40);
         self.dateLabel.frame =CGRectMake(20, self.segmentedControl.frame.origin.y+self.segmentedControl.frame.size.height+20, self.view.frame.size.width-40, 40);
@@ -239,9 +224,9 @@
             self.searchBackground.frame =CGRectMake((self.view.bounds.size.width/2)-41,self.dateLabel.frame.origin.y+self.dateLabel.frame.size.height+19,82,42);
             self.Search.frame = CGRectMake((self.view.bounds.size.width/2)-40,self.dateLabel.frame.origin.y+self.dateLabel.frame.size.height+20,80,40);
         }
-    } completion:^(BOOL finished) {
-        //completed
-    }];
+//    } completion:^(BOOL finished) {
+//        //completed
+//    }];
 }
 
 -(void)selectDate{
@@ -311,19 +296,22 @@
                         NSSortDescriptor *descriptor = [[NSSortDescriptor alloc] initWithKey:@"NewDistance"  ascending:YES];
                         
                         self.suggestionsData=[[self.suggestionsData sortedArrayUsingDescriptors:[NSArray arrayWithObjects:descriptor,nil]] mutableCopy];
-                        [self.suggestionsTable reloadData];
 
                         if(self.suggestionsData.count >0){
                             NSLog(@"I should be moving now");
                             self.suggestionsTable.frame = CGRectMake(32, textField.frame.origin.y+textField.frame.size.height, self.view.bounds.size.width-64, 50);
-
+                            [self.suggestionsTable reloadData];
                             if ((textField.frame.origin.y+textField.frame.size.height<self.endTextField.frame.origin.y)) {
                                 [self setMovedFramesForStart];
+                                NSLog(@"why am i not moving");
                             }
                             else{
                                 [self setMovedFramesForEnd];
                             }
 
+                        }
+                        else{
+                            [self setInitialFrames];
                         }
                         
 

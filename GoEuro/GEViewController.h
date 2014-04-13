@@ -15,9 +15,7 @@
 @property (strong,nonatomic) UILabel *logoBackground;
 @property (strong, nonatomic) UIImageView *imageView;
 @property (strong, nonatomic) UITextField *startTextField;
-@property (strong,nonatomic) UIButton *currentLocation1;
 @property (strong, nonatomic) UITextField *endTextField;
-@property (strong,nonatomic) UIButton *currentLocation2;
 @property (strong,nonatomic) UISegmentedControl *segmentedControl;
 @property (strong,nonatomic) UILabel *dateLabel;
 @property (strong,nonatomic) UILabel *dateLabelReturn;
