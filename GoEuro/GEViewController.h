@@ -30,5 +30,4 @@
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) CLLocation *location;
 
-- (IBAction)Search:(id)sender;
 @end

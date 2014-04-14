@@ -97,6 +97,9 @@
     self.Search.clipsToBounds = YES;
     self.Search.backgroundColor = [UIColor colorWithRed:245/255.f green:184/255.f blue:71/255.f alpha:1];
     [self.Search setTitle:@"Search" forState:UIControlStateNormal];
+    [self.Search addTarget:self
+               action:@selector(searchButtonWasPressed)
+     forControlEvents:UIControlEventTouchUpInside];
     [self.scrollView addSubview:self.Search];
     
     
@@ -140,6 +143,145 @@
     [self.locationManager startUpdatingLocation];
 }
 
+#pragma mark UI position and behaviour
+
+-(void)setInitialFrames{
+    //UI
+    [UIView animateWithDuration:.5 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
+        self.logoBackground.frame = CGRectMake(0, 0, self.view.bounds.size.width, (self.view.bounds.size.height/5) +15);
+        self.imageView.frame =CGRectMake(20, 15, self.view.bounds.size.width-40, self.view.bounds.size.height/5);
+        self.startTextField.frame = CGRectMake(20, self.imageView.frame.origin.y+self.imageView.frame.size.height+20, self.view.bounds.size.width-40, 40);
+        self.endTextField.frame = CGRectMake(20, self.startTextField.frame.origin.y+self.startTextField.frame.size.height+20, self.view.bounds.size.width-40, 40);
+        self.segmentedControl.frame =CGRectMake(20, self.endTextField.frame.origin.y+self.endTextField.frame.size.height+20, self.view.frame.size.width-40, 40);
+        self.dateLabel.frame =CGRectMake(20, self.segmentedControl.frame.origin.y+self.segmentedControl.frame.size.height+20, self.view.frame.size.width-40, 40);
+        
+        if(self.segmentedControl.selectedSegmentIndex==0){
+            self.dateLabelReturn.frame =CGRectMake(20, self.dateLabel.frame.origin.y+self.dateLabel.frame.size.height+20, self.view.frame.size.width-40, 40);
+            self.searchBackground.frame =CGRectMake((self.view.bounds.size.width/2)-41,self.dateLabelReturn.frame.origin.y+self.dateLabelReturn.frame.size.height+19,82,42);
+            self.Search.frame = CGRectMake((self.view.bounds.size.width/2)-40,self.dateLabelReturn.frame.origin.y+self.dateLabelReturn.frame.size.height+20,80,40);
+        }
+        else{
+            self.searchBackground.frame =CGRectMake((self.view.bounds.size.width/2)-41,self.dateLabel.frame.origin.y+self.dateLabel.frame.size.height+19,82,42);
+            self.Search.frame = CGRectMake((self.view.bounds.size.width/2)-40,self.dateLabel.frame.origin.y+self.dateLabel.frame.size.height+20,80,40);
+        }
+        
+        self.datePicker.frame = CGRectMake(self.view.bounds.size.width, self.view.bounds.size.height, self.view.bounds.size.width, 160);
+    } completion:^(BOOL finished) {
+        //completed
+    }];
+    self.suggestionsTable.frame = CGRectMake(0, 0, 0, 0);
+}
+-(void)setMovedFramesForStart{
+    [UIView animateWithDuration:.5 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        self.endTextField.frame = CGRectMake(20, self.startTextField.frame.origin.y+self.startTextField.frame.size.height+20+50, self.view.bounds.size.width-40, 40);
+        self.segmentedControl.frame =CGRectMake(20, self.endTextField.frame.origin.y+self.endTextField.frame.size.height+20, self.view.frame.size.width-40, 40);
+        self.dateLabel.frame =CGRectMake(20, self.segmentedControl.frame.origin.y+self.segmentedControl.frame.size.height+20, self.view.frame.size.width-40, 40);
+        if(self.segmentedControl.selectedSegmentIndex==0){
+            self.dateLabelReturn.frame =CGRectMake(20, self.dateLabel.frame.origin.y+self.dateLabel.frame.size.height+20, self.view.frame.size.width-40, 40);
+            self.searchBackground.frame =CGRectMake((self.view.bounds.size.width/2)-41,self.dateLabelReturn.frame.origin.y+self.dateLabelReturn.frame.size.height+19,82,42);
+            self.Search.frame = CGRectMake((self.view.bounds.size.width/2)-40,self.dateLabelReturn.frame.origin.y+self.dateLabelReturn.frame.size.height+20,80,40);
+        }
+        else{
+            self.searchBackground.frame =CGRectMake((self.view.bounds.size.width/2)-41,self.dateLabel.frame.origin.y+self.dateLabel.frame.size.height+19,82,42);
+            self.Search.frame = CGRectMake((self.view.bounds.size.width/2)-40,self.dateLabel.frame.origin.y+self.dateLabel.frame.size.height+20,80,40);
+        }
+    } completion:^(BOOL finished) {
+        //completed
+    }];
+}
+
+-(void)setMovedFramesForEnd{
+    [UIView animateWithDuration:.5 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        [self.scrollView setContentOffset:CGPointMake(self.scrollView.contentOffset.x, self.scrollView.contentOffset.x +50) animated:YES];
+        self.segmentedControl.frame =CGRectMake(20, self.endTextField.frame.origin.y+self.endTextField.frame.size.height+20+50, self.view.frame.size.width-40, 40);
+        self.dateLabel.frame =CGRectMake(20, self.segmentedControl.frame.origin.y+self.segmentedControl.frame.size.height+20, self.view.frame.size.width-40, 40);
+        if(self.segmentedControl.selectedSegmentIndex==0){
+            self.dateLabelReturn.frame =CGRectMake(20, self.dateLabel.frame.origin.y+self.dateLabel.frame.size.height+20, self.view.frame.size.width-40, 40);
+            self.searchBackground.frame =CGRectMake((self.view.bounds.size.width/2)-41,self.dateLabelReturn.frame.origin.y+self.dateLabelReturn.frame.size.height+19,82,42);
+            self.Search.frame = CGRectMake((self.view.bounds.size.width/2)-40,self.dateLabelReturn.frame.origin.y+self.dateLabelReturn.frame.size.height+20,80,40);
+        }
+        else{
+            self.searchBackground.frame =CGRectMake((self.view.bounds.size.width/2)-41,self.dateLabel.frame.origin.y+self.dateLabel.frame.size.height+19,82,42);
+            self.Search.frame = CGRectMake((self.view.bounds.size.width/2)-40,self.dateLabel.frame.origin.y+self.dateLabel.frame.size.height+20,80,40);
+        }
+    } completion:^(BOOL finished) {
+        //completed
+    }];
+}
+
+-(void)selectDate{
+    
+    self.datePicker.frame = CGRectMake(0, self.view.bounds.size.height+10, self.view.bounds.size.width, 160);
+    [UIView animateWithDuration:.5 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        
+        self.datePicker.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width,160);
+        [self.scrollView setContentOffset:CGPointMake(0, 160)];
+    } completion:^(BOOL finished) {
+    }];
+}
+
+
+-(void)dateChanged{
+    if(self.startOrFinish){
+        self.dateLabel.text = [NSString stringWithFormat: @" %@",[NSDateFormatter localizedStringFromDate:[self.datePicker date]
+                                                                                                dateStyle:NSDateFormatterMediumStyle
+                                                                                                timeStyle:NSDateFormatterShortStyle]];
+        self.dateLabel.textColor=[UIColor blackColor];
+    }else{
+        self.dateLabelReturn.text =[NSString stringWithFormat: @" %@",[NSDateFormatter localizedStringFromDate:[self.datePicker date]
+                                                                                                     dateStyle:NSDateFormatterMediumStyle
+                                                                                                     timeStyle:NSDateFormatterShortStyle]];
+        self.dateLabelReturn.textColor=[UIColor blackColor];
+        
+    }
+    
+}
+
+-(void)tripChanged{
+    if(self.segmentedControl.selectedSegmentIndex==0){
+        self.dateLabelReturn.frame = self.dateLabel.frame;
+        [UIView animateWithDuration:.5 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+            self.dateLabelReturn.frame =CGRectMake(20, self.dateLabel.frame.origin.y+self.dateLabel.frame.size.height+20, self.view.frame.size.width-40, 40);
+            self.searchBackground.frame =CGRectMake((self.view.bounds.size.width/2)-41,self.dateLabelReturn.frame.origin.y+self.dateLabelReturn.frame.size.height+19,82,42);
+            self.Search.frame = CGRectMake((self.view.bounds.size.width/2)-40,self.dateLabelReturn.frame.origin.y+self.dateLabelReturn.frame.size.height+20,80,40);
+        } completion:^(BOOL finished) {
+            
+        }];
+    }
+    else{
+        self.dateLabelReturn.frame=CGRectNull;
+        [UIView animateWithDuration:.5 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+            self.searchBackground.frame =CGRectMake((self.view.bounds.size.width/2)-41,self.dateLabel.frame.origin.y+self.dateLabel.frame.size.height+19,82,42);
+            self.Search.frame = CGRectMake((self.view.bounds.size.width/2)-40,self.dateLabel.frame.origin.y+self.dateLabel.frame.size.height+20,80,40);
+        } completion:^(BOOL finished) {
+            
+        }];
+    }
+}
+
+-(void)searchButtonWasPressed{
+    if((self.startTextField.text != (NSString*) [NSNull null] && self.startTextField.text.length != 0 )&&(self.endTextField.text != (NSString*) [NSNull null] && self.endTextField.text.length != 0 )){
+        UIAlertView *searchAlert = [[UIAlertView alloc] initWithTitle:@"Lets travel!"
+                                                              message:[NSString stringWithFormat:@"from :%@ to %@",self.startTextField.text,self.endTextField.text ]
+                                                             delegate:nil
+                                                    cancelButtonTitle:@"OK"
+                                                    otherButtonTitles:nil];
+        [searchAlert show];
+    }
+    else{
+        UIAlertView *errorAlert = [[UIAlertView alloc] initWithTitle:@"Search"
+                                                             message:[NSString stringWithFormat:@"Please fill in the information" ]
+                                                            delegate:nil
+                                                   cancelButtonTitle:@"OK"
+                                                   otherButtonTitles:nil];
+        [errorAlert show];
+        
+    }
+}
+
+#pragma mark gesture recognizers
+
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
     if ((touch.view == self.dateLabel)) {//change it to your condition
         [self selectDate];
@@ -165,88 +307,14 @@
     return YES;
 }
 
--(void)setInitialFrames{
-//    [UIView animateWithDuration:.5 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-        [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
-        self.logoBackground.frame = CGRectMake(0, 0, self.view.bounds.size.width, (self.view.bounds.size.height/5) +15);
-        self.imageView.frame =CGRectMake(20, 15, self.view.bounds.size.width-40, self.view.bounds.size.height/5);
-        self.startTextField.frame = CGRectMake(20, self.imageView.frame.origin.y+self.imageView.frame.size.height+20, self.view.bounds.size.width-40, 40);
-               self.endTextField.frame = CGRectMake(20, self.startTextField.frame.origin.y+self.startTextField.frame.size.height+20, self.view.bounds.size.width-40, 40);
-        self.segmentedControl.frame =CGRectMake(20, self.endTextField.frame.origin.y+self.endTextField.frame.size.height+20, self.view.frame.size.width-40, 40);
-        self.dateLabel.frame =CGRectMake(20, self.segmentedControl.frame.origin.y+self.segmentedControl.frame.size.height+20, self.view.frame.size.width-40, 40);
-        
-        if(self.segmentedControl.selectedSegmentIndex==0){
-            self.dateLabelReturn.frame =CGRectMake(20, self.dateLabel.frame.origin.y+self.dateLabel.frame.size.height+20, self.view.frame.size.width-40, 40);
-            self.searchBackground.frame =CGRectMake((self.view.bounds.size.width/2)-41,self.dateLabelReturn.frame.origin.y+self.dateLabelReturn.frame.size.height+19,82,42);
-            self.Search.frame = CGRectMake((self.view.bounds.size.width/2)-40,self.dateLabelReturn.frame.origin.y+self.dateLabelReturn.frame.size.height+20,80,40);
-        }
-        else{
-            self.searchBackground.frame =CGRectMake((self.view.bounds.size.width/2)-41,self.dateLabel.frame.origin.y+self.dateLabel.frame.size.height+19,82,42);
-            self.Search.frame = CGRectMake((self.view.bounds.size.width/2)-40,self.dateLabel.frame.origin.y+self.dateLabel.frame.size.height+20,80,40);
-        }
-        
-        self.datePicker.frame = CGRectMake(self.view.bounds.size.width, self.view.bounds.size.height, self.view.bounds.size.width, 160);
-//    } completion:^(BOOL finished) {
-//    //completed
-//}];
-    self.suggestionsTable.frame = CGRectMake(0, 0, 0, 0);
-}
--(void)setMovedFramesForStart{
-//    [UIView animateWithDuration:.5 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-        self.endTextField.frame = CGRectMake(20, self.startTextField.frame.origin.y+self.startTextField.frame.size.height+20+50, self.view.bounds.size.width-40, 40);
-        self.segmentedControl.frame =CGRectMake(20, self.endTextField.frame.origin.y+self.endTextField.frame.size.height+20, self.view.frame.size.width-40, 40);
-        self.dateLabel.frame =CGRectMake(20, self.segmentedControl.frame.origin.y+self.segmentedControl.frame.size.height+20, self.view.frame.size.width-40, 40);
-        if(self.segmentedControl.selectedSegmentIndex==0){
-            self.dateLabelReturn.frame =CGRectMake(20, self.dateLabel.frame.origin.y+self.dateLabel.frame.size.height+20, self.view.frame.size.width-40, 40);
-            self.searchBackground.frame =CGRectMake((self.view.bounds.size.width/2)-41,self.dateLabelReturn.frame.origin.y+self.dateLabelReturn.frame.size.height+19,82,42);
-            self.Search.frame = CGRectMake((self.view.bounds.size.width/2)-40,self.dateLabelReturn.frame.origin.y+self.dateLabelReturn.frame.size.height+20,80,40);
-        }
-        else{
-            self.searchBackground.frame =CGRectMake((self.view.bounds.size.width/2)-41,self.dateLabel.frame.origin.y+self.dateLabel.frame.size.height+19,82,42);
-            self.Search.frame = CGRectMake((self.view.bounds.size.width/2)-40,self.dateLabel.frame.origin.y+self.dateLabel.frame.size.height+20,80,40);
-        }
-//    } completion:^(BOOL finished) {
-//        //completed
-//    }];
-}
-
--(void)setMovedFramesForEnd{
-//    [UIView animateWithDuration:.5 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-        [self.scrollView setContentOffset:CGPointMake(self.scrollView.contentOffset.x, self.scrollView.contentOffset.x +50) animated:YES];
-        self.segmentedControl.frame =CGRectMake(20, self.endTextField.frame.origin.y+self.endTextField.frame.size.height+20+50, self.view.frame.size.width-40, 40);
-        self.dateLabel.frame =CGRectMake(20, self.segmentedControl.frame.origin.y+self.segmentedControl.frame.size.height+20, self.view.frame.size.width-40, 40);
-        if(self.segmentedControl.selectedSegmentIndex==0){
-            self.dateLabelReturn.frame =CGRectMake(20, self.dateLabel.frame.origin.y+self.dateLabel.frame.size.height+20, self.view.frame.size.width-40, 40);
-            self.searchBackground.frame =CGRectMake((self.view.bounds.size.width/2)-41,self.dateLabelReturn.frame.origin.y+self.dateLabelReturn.frame.size.height+19,82,42);
-            self.Search.frame = CGRectMake((self.view.bounds.size.width/2)-40,self.dateLabelReturn.frame.origin.y+self.dateLabelReturn.frame.size.height+20,80,40);
-        }
-        else{
-            self.searchBackground.frame =CGRectMake((self.view.bounds.size.width/2)-41,self.dateLabel.frame.origin.y+self.dateLabel.frame.size.height+19,82,42);
-            self.Search.frame = CGRectMake((self.view.bounds.size.width/2)-40,self.dateLabel.frame.origin.y+self.dateLabel.frame.size.height+20,80,40);
-        }
-//    } completion:^(BOOL finished) {
-//        //completed
-//    }];
-}
-
--(void)selectDate{
-    
-    self.datePicker.frame = CGRectMake(0, self.view.bounds.size.height+10, self.view.bounds.size.width, 160);
-    [UIView animateWithDuration:.5 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-        
-        self.datePicker.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width,160);
-        [self.scrollView setContentOffset:CGPointMake(0, 160)];
-    } completion:^(BOOL finished) {
-        
-    }];
-    
-    
-}
 -(void)handleSingleTap{
     [self setInitialFrames];
     [self.startTextField resignFirstResponder];
-    [self.endTextField resignFirstResponder];
+//    [self.endTextField resignFirstResponder];
 }
+
+
+#pragma mark textfield delegate methods
 -(void)textFieldDidEndEditing:(UITextField *)textField{
     [self setInitialFrames];
     [textField resignFirstResponder];
@@ -258,11 +326,6 @@
     return YES;
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
     [self.suggestionsData removeAllObjects];
@@ -296,26 +359,27 @@
                         NSSortDescriptor *descriptor = [[NSSortDescriptor alloc] initWithKey:@"NewDistance"  ascending:YES];
                         
                         self.suggestionsData=[[self.suggestionsData sortedArrayUsingDescriptors:[NSArray arrayWithObjects:descriptor,nil]] mutableCopy];
-
-                        if(self.suggestionsData.count >0){
-                            NSLog(@"I should be moving now");
-                            self.suggestionsTable.frame = CGRectMake(32, textField.frame.origin.y+textField.frame.size.height, self.view.bounds.size.width-64, 50);
-                            [self.suggestionsTable reloadData];
-                            if ((textField.frame.origin.y+textField.frame.size.height<self.endTextField.frame.origin.y)) {
-                                [self setMovedFramesForStart];
-                                NSLog(@"why am i not moving");
-                            }
-                            else{
-                                [self setMovedFramesForEnd];
-                            }
-
-                        }
-                        else{
-                            [self setInitialFrames];
-                        }
                         
-
-                    }                }] resume];
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                if(self.suggestionsData.count >0){
+                                    self.suggestionsTable.frame = CGRectMake(32, textField.frame.origin.y+textField.frame.size.height, self.view.bounds.size.width-64, 50);
+                                    if ((textField.frame.origin.y+textField.frame.size.height<self.endTextField.frame.origin.y)) {
+                                        [self setMovedFramesForStart];
+                                    }
+                                    else{
+                                        [self setMovedFramesForEnd];
+                                    }
+                                }
+                                else{
+                                    [self setInitialFrames];
+                                }
+                                
+                            }
+                            );
+                            [self.suggestionsTable reloadData];
+                        }
+                    }
+                    ] resume];
     }];
 
     
@@ -323,6 +387,8 @@
    
     return YES;
 }
+
+#pragma mark tableview delegate methods
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return [self.suggestionsData count];
@@ -359,52 +425,7 @@
     }
     
 }
-
-- (void)searchAutocompleteEntriesWithSubstring:(NSString *)substring
-{
-    
-}
-- (IBAction)Search:(id)sender {
-    
-}
-
--(void)dateChanged{
-    if(self.startOrFinish){
-        self.dateLabel.text = [NSString stringWithFormat: @" %@",[NSDateFormatter localizedStringFromDate:[self.datePicker date]
-                                                                                                dateStyle:NSDateFormatterMediumStyle
-                                                                                                timeStyle:NSDateFormatterShortStyle]];
-        self.dateLabel.textColor=[UIColor blackColor];
-    }else{
-        self.dateLabelReturn.text =[NSString stringWithFormat: @" %@",[NSDateFormatter localizedStringFromDate:[self.datePicker date]
-                                                                  dateStyle:NSDateFormatterMediumStyle
-                                                                  timeStyle:NSDateFormatterShortStyle]];
-        self.dateLabelReturn.textColor=[UIColor blackColor];
-
-    }
-    
-}
-
--(void)tripChanged{
-    if(self.segmentedControl.selectedSegmentIndex==0){
-        self.dateLabelReturn.frame = self.dateLabel.frame;
-        [UIView animateWithDuration:.5 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-            self.dateLabelReturn.frame =CGRectMake(20, self.dateLabel.frame.origin.y+self.dateLabel.frame.size.height+20, self.view.frame.size.width-40, 40);
-            self.searchBackground.frame =CGRectMake((self.view.bounds.size.width/2)-41,self.dateLabelReturn.frame.origin.y+self.dateLabelReturn.frame.size.height+19,82,42);
-            self.Search.frame = CGRectMake((self.view.bounds.size.width/2)-40,self.dateLabelReturn.frame.origin.y+self.dateLabelReturn.frame.size.height+20,80,40);
-        } completion:^(BOOL finished) {
-            
-        }];
-    }
-    else{
-        self.dateLabelReturn.frame=CGRectNull;
-        [UIView animateWithDuration:.5 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-            self.searchBackground.frame =CGRectMake((self.view.bounds.size.width/2)-41,self.dateLabel.frame.origin.y+self.dateLabel.frame.size.height+19,82,42);
-            self.Search.frame = CGRectMake((self.view.bounds.size.width/2)-40,self.dateLabel.frame.origin.y+self.dateLabel.frame.size.height+20,80,40);
-        } completion:^(BOOL finished) {
-            
-        }];
-    }
-}
+#pragma mark Location manager
 
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     self.location = locations.lastObject;
@@ -419,4 +440,6 @@
     }
 //   [manager stopUpdatingLocation];
 }
+
+
 @end
